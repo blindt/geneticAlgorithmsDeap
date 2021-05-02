@@ -9,6 +9,8 @@ from deap import base
 from deap import creator
 from deap import tools
 
+import matplotlib.pyplot as plt
+
 toolbox = base.Toolbox()
 
 
@@ -124,7 +126,27 @@ def set_algorithm(select_type, find_element_type, cross_type, mut_type):
 size_population = 100
 probability_mutation = 0.2
 probability_crossover = 0.8
-number_iteration = 10
+number_iteration = 1000
+
+
+def generate_plots(best, mean, std):
+    plt.xlabel("epoch")
+    plt.ylabel("function value")
+    plt.title("best function values")
+    plt.plot(best)
+    plt.show()
+
+    plt.xlabel("epoch")
+    plt.ylabel("mean")
+    plt.title("mean values")
+    plt.plot(mean)
+    plt.show()
+
+    plt.xlabel("epoch")
+    plt.ylabel("std value")
+    plt.title("std values")
+    plt.plot(std)
+    plt.show()
 
 
 def run_algorithm(pop):
@@ -188,10 +210,11 @@ def run_algorithm(pop):
         best_ind = tools.selBest(pop, 1)[0]
         mean_list.append(mean)
         std_list.append(std)
-        best_list.append(best_ind)
+        best_list.append(best_ind.fitness.values)
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
         #
     print("-- End of (successful) evolution --")
+    generate_plots(best_list, mean_list, std_list)
 
 
 # Press the green button in the gutter to run the script.
