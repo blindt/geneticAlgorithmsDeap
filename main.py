@@ -124,12 +124,15 @@ def set_algorithm(select_type, find_element_type, cross_type, mut_type):
 size_population = 100
 probability_mutation = 0.2
 probability_crossover = 0.8
-number_iteration = 100
+number_iteration = 10
 
 
 def run_algorithm(pop):
     g = 0
     number_elitism = 1
+    best_list = []
+    mean_list = []
+    std_list = []
     while g < number_iteration:
         g = g + 1
         print("-- Generation %i --" % g)
@@ -183,6 +186,9 @@ def run_algorithm(pop):
         print("  Avg %s" % mean)
         print("  Std %s" % std)
         best_ind = tools.selBest(pop, 1)[0]
+        mean_list.append(mean)
+        std_list.append(std)
+        best_list.append(best_ind)
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
         #
     print("-- End of (successful) evolution --")
