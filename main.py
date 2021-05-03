@@ -4,6 +4,7 @@
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 import multiprocessing
 import random
+import time
 
 from deap import base
 from deap import creator
@@ -74,11 +75,6 @@ def individual(icls):
     return icls(genome)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
 def main_ui():
     print("Select type of algorithm: ")
     print("1. Maximization")
@@ -126,7 +122,7 @@ def set_algorithm(select_type, find_element_type, cross_type, mut_type):
     return pop
 
 
-size_population = 100
+size_population = 1000
 probability_mutation = 0.2
 probability_crossover = 0.8
 number_iteration = 1000
@@ -158,6 +154,7 @@ def run_algorithm(pop):
     best_list = []
     mean_list = []
     std_list = []
+    start_time = time.time()
     while g < number_iteration:
         g = g + 1
         print("-- Generation %i --" % g)
@@ -217,16 +214,17 @@ def run_algorithm(pop):
         print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
         #
     print("-- End of (successful) evolution --")
+    print("time is: ", time.time() - start_time)
     generate_plots(best_list, mean_list, std_list)
 
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     select, find_element, cross, mut = main_ui()
+
     pool = multiprocessing.Pool(processes=4)
     pop = set_algorithm(select, find_element, cross, mut)
     set_map_for_toolbox(pool)
     run_algorithm(pop)
-    print_hi('PyCharm')
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
