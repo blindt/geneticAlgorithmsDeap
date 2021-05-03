@@ -22,7 +22,7 @@ def set_type_of_find_element(findtype):
 
 
 def set_fitness_function():
-    toolbox.register("evaluate", fitnessFunction)
+    toolbox.register("evaluate", fitness_function)
 
 
 def set_selection_method(seltype, parameter):
@@ -58,8 +58,11 @@ def set_map_for_toolbox(pool):
     toolbox.register("map", pool.map)
 
 
-def fitnessFunction(individual):
-    result = (individual[0] + 2 * individual[1] - 7) ** 2 + (2 * individual[0] + individual[1] - 5) ** 2
+def fitness_function(individual):
+    result = (1.5 - individual[0] + individual[0]*individual[1])**2\
+             + (2.25 - individual[0] + individual[0] * individual[1]**2)**2\
+             + (2.625 - individual[0] + individual[0]*individual[1]**3)**2
+    #result = (individual[0] + 2 * individual[1] - 7) ** 2 + (2 * individual[0] + individual[1] - 5) ** 2
     return result,
 
 
