@@ -15,6 +15,27 @@ import matplotlib.pyplot as plt
 toolbox = base.Toolbox()
 
 
+def arithmetic_crossing(ind1, ind2):
+    k = random.uniform(0, 1)
+
+    new_ind1 = tuple(k * x for x in ind1) + tuple((1 - k) * x for x in ind2)
+    new_ind2 = tuple((1 - k) * x for x in ind1) + tuple(k * x for x in ind2)
+    return new_ind1, new_ind2
+
+
+def heuristic_crossing(ind1, ind2):
+    k = random.uniform(0, 1)
+    if ind2.fitness.values >= ind1.fitness.values:
+        x1new = k * (ind2[0] - ind1[0]) + ind2[0]
+        y1new = k * (ind2[1] - ind1[1]) + ind2[1]
+        new_ind = (x1new, y1new)
+    else:
+        x1new = k * (ind1[0] - ind2[0]) + ind1[0]
+        y1new = k * (ind1[1] - ind2[1]) + ind1[1]
+        new_ind = (x1new, y1new)
+    return new_ind
+
+
 def set_type_of_find_element(findtype):
     if findtype == 1:
         creator.create("Fitness", base.Fitness, weights=(1.0,))
@@ -43,7 +64,11 @@ def set_crossing_method(crosstype):
     if crosstype == 1:
         toolbox.register("mate", tools.cxOnePoint)
     if crosstype == 2:
-        toolbox.register("mate", tools.cxUniform)
+        toolbox.register("mate", tools.cxUniform, indpb=0.5)
+    if crosstype == 3:
+        toolbox.register("mate", arithmetic_crossing)
+    if crosstype == 4:
+        toolbox.register("mate", heuristic_crossing)
 
 
 def set_mutation_method(muttype):
@@ -92,12 +117,14 @@ def main_ui():
     print("Select type of crossing: ")
     print("1. One Point")
     print("2. Uniform")
+    print("3. Arithmetic")
+    print("4. Heuristic")
     cross_type = int(input())
 
     print("Select type of mutation: ")
     print("1. Gaussian")
     print("2. Shuffle indexes")
-    print("2. Flip bit")
+    print("3. Flip bit")
     mut_type = int(input())
 
     return select_type, find_element_type, cross_type, mut_type
