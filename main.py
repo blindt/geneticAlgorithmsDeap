@@ -56,7 +56,7 @@ def set_selection_method(seltype, parameter):
         toolbox.register("select", tools.selBest)
     elif seltype == 4:
         toolbox.register("select", tools.selWorst)
-    elif seltype == 4:
+    elif seltype == 5:
         toolbox.register("select", tools.selRoulette)
 
 
