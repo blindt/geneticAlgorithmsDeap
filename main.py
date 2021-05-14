@@ -1,4 +1,3 @@
-# This is a sample Python script.
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
@@ -88,7 +87,6 @@ def fitness_function(individual):
     result = (1.5 - individual[0] + individual[0]*individual[1])**2\
              + (2.25 - individual[0] + individual[0] * individual[1]**2)**2\
              + (2.625 - individual[0] + individual[0]*individual[1]**3)**2
-    #result = (individual[0] + 2 * individual[1] - 7) ** 2 + (2 * individual[0] + individual[1] - 5) ** 2
     return result,
 
 
@@ -130,7 +128,7 @@ def main_ui():
     return select_type, find_element_type, cross_type, mut_type
 
 
-creator.create("Fitness", base.Fitness, weights=(1.0,))
+creator.create("Fitness", base.Fitness, weights=(-1.0,))
 creator.create("Individual", list, fitness=creator.Fitness)
 toolbox.register('individual', individual, creator.Individual)
 toolbox.register("population", tools.initRepeat, list, toolbox.individual)
@@ -184,12 +182,12 @@ def run_algorithm(pop):
     start_time = time.time()
     while g < number_iteration:
         g = g + 1
-        print("-- Generation %i --" % g)
+        #print("-- Generation %i --" % g)
 
         # Select the next generation individuals
         offspring = toolbox.select(pop, len(pop))
         # Clone the selected individuals
-        offspring = list(map(toolbox.clone, offspring))
+        offspring = list(toolbox.map(toolbox.clone, offspring))
 
         list_elitism = []
         for x in range(0, number_elitism):
@@ -219,7 +217,7 @@ def run_algorithm(pop):
         for ind, fit in zip(invalid_ind, fitnesses):
             ind.fitness.values = fit
 
-        print("  Evaluated %i individuals" % len(invalid_ind))
+        #print("  Evaluated %i individuals" % len(invalid_ind))
         pop[:] = offspring + list_elitism
 
         # Gather all the fitnesses in one list and print the stats
@@ -230,15 +228,15 @@ def run_algorithm(pop):
         sum2 = sum(x * x for x in fits)
         std = abs(sum2 / length - mean ** 2) ** 0.5
 
-        print("  Min %s" % min(fits))
-        print("  Max %s" % max(fits))
-        print("  Avg %s" % mean)
-        print("  Std %s" % std)
+        # print("  Min %s" % min(fits))
+        # print("  Max %s" % max(fits))
+        # print("  Avg %s" % mean)
+        # print("  Std %s" % std)
         best_ind = tools.selBest(pop, 1)[0]
         mean_list.append(mean)
         std_list.append(std)
         best_list.append(best_ind.fitness.values)
-        print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
+        #print("Best individual is %s, %s" % (best_ind, best_ind.fitness.values))
         #
     print("-- End of (successful) evolution --")
     print("time is: ", time.time() - start_time)
@@ -249,7 +247,7 @@ def run_algorithm(pop):
 if __name__ == '__main__':
     select, find_element, cross, mut = main_ui()
 
-    pool = multiprocessing.Pool(processes=4)
+    pool = multiprocessing.Pool(processes=1)
     pop = set_algorithm(select, find_element, cross, mut)
     set_map_for_toolbox(pool)
     run_algorithm(pop)
